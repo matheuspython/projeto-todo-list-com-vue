@@ -10,7 +10,7 @@ const todos_asc = computed(() =>
   todos.value.sort((a, b) => {
     return b.createAt - a.createAt;
   })
-); 
+);
 
 watch(name, (newVal) => {
   localStorage.setItem("name", newVal);
@@ -18,28 +18,32 @@ watch(name, (newVal) => {
 
 onMounted(() => {
   name.value = localStorage.getItem("name") || "";
-  todos.value = JSON.parse(localStorage.getItem('todos') || [])
+  todos.value = JSON.parse(localStorage.getItem("todos") || []);
 });
 const addTodo = () => {
-  if(input_content.value.trim() === '' || input_category.value === null) {
-    return 
+  if (input_content.value.trim() === "" || input_category.value === null) {
+    return;
   }
   todos.value.push({
     content: input_content.value,
     category: input_category.value,
     done: false,
     createdAt: new Date().getTime(),
-  })
-  input_content.value = ''
-  input_category.value = null
+  });
+  input_content.value = "";
+  input_category.value = null;
 };
-watch(todos, newVal => {
-  localStorage.setItem('todos', JSON.stringify(newVal))
-}, { deep: true })
+watch(
+  todos,
+  (newVal) => {
+    localStorage.setItem("todos", JSON.stringify(newVal));
+  },
+  { deep: true }
+);
 
-const removeTodo = todo => {
-  todos.value = todos.value.filter(t => t !== todo)
-}
+const removeTodo = (todo) => {
+  todos.value = todos.value.filter((t) => t !== todo);
+};
 </script>
 
 <template>
@@ -63,32 +67,45 @@ const removeTodo = todo => {
         <h4>Pick a category</h4>
         <div class="options">
           <label>
-            <input type="radio" name="category" value="business" v-model="input_category">
+            <input
+              type="radio"
+              name="category"
+              value="business"
+              v-model="input_category"
+            />
             <span class="bubble business"></span>
             <div>Bussiness</div>
           </label>
 
-            <label>
-            <input type="radio" name="category"  value="personal" v-model="input_category">
+          <label>
+            <input
+              type="radio"
+              name="category"
+              value="personal"
+              v-model="input_category"
+            />
             <span class="bubble personal"></span>
             <div>Perssonal</div>
           </label>
-          {{input_category}}
+          {{ input_category }}
         </div>
-        <input type="submit" value="add todo">
+        <input type="submit" value="add todo" />
       </form>
     </section>
     <section class="todo-list">
       <h3>TODO LIST</h3>
       <div class="list">
-        <div v-for="todo in todos_asc" :class="`todo-item ${todo.done && 'done'}`">
+        <div
+          v-for="todo in todos_asc"
+          :class="`todo-item ${todo.done && 'done'}`"
+        >
           <label>
-            <input type="checkbox" v-model="todo.done">
+            <input type="checkbox" v-model="todo.done" />
             <span :class="`bubble ${todo.category}`"></span>
           </label>
 
           <div class="todo-content">
-            <input type="text" v-model="todo.content">
+            <input type="text" v-model="todo.content" />
           </div>
           <div class="actions">
             <button @click="removeTodo(todo)" class="delete">Delete</button>
